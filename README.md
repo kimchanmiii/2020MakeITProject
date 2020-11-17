@@ -99,7 +99,7 @@
  
 <img src="https://github.com/young43/makeITProject/blob/main/img/project_resume.jpg?raw=true" alt="두번째 화면" width=500/>
 
-## 각자 맡은 부분 
+## 5. 각자 맡은 부분 
 
 
 ### MainActivity
@@ -184,11 +184,12 @@ public class MainActivity extends AppCompatActivity {
         frag2 = new FragmentNotice();
         frag3 = new FragmentMypage();
 
-        // 첫 화면은 FragmentHome으로 설정.
-        // setFrag에 주는 정수에 따라서 프래그먼트 트랜지션이 이루어짐.
+
         setFrag(0, null); // 첫 프래그먼트 화면 지정
     }
 
+    // 첫 화면은 FragmentHome으로 설정.
+    // setFrag에 주는 정수에 따라서 프래그먼트 트랜지션이 이루어짐.
     public void setFrag(int n, Fragment frag) {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
@@ -226,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
         }
+
     }
 }
 ```
@@ -284,6 +286,11 @@ public class FragmentHome extends Fragment {
 
     public FragmentHome() {
         // Required empty public constructor
+    }
+
+    // 사용자 정의 callback 함수 (Firebase 데이터가 다 조회되었는지 check하는 역할)
+    public interface MyDataCallback{
+        void onCallback();
     }
 
 
@@ -347,11 +354,8 @@ public class FragmentHome extends Fragment {
         return rootView;
     }
 
-    /////////
-    public interface MyDataCallback{
-        void onCallback();
-    }
-
+    // Firebase 연동
+    // apply 컬렉션 조회하고, 해당 프로젝트는 selectProjectlistOnFirebase 함수를 통해 다시 재조회함.
     public void selectApplyOnFirebase(){
         String id = SaveSharedPreference.getUserName(getContext());
         final DocumentReference docRef = db.collection("apply").document(id);
@@ -388,6 +392,8 @@ public class FragmentHome extends Fragment {
 
     }
 
+    // Firebase 연동
+    // project_list 컬렉션을 조회하고 내부 callback함수를 호출하여 Firebase 데이터 조회가 완료됨을 알림.
     public void selectProjectlistOnFirebase(String key, final MyDataCallback callback){
         db.collection("project_list").document(key)
             .get()
@@ -594,6 +600,7 @@ public class ProjectInfoActivity extends AppCompatActivity {
     HashMap<String, Object> data;
     TextView textTitle, textContent, textPhone, textEmail, textRegion, textMember, textDate;
 
+    // 사용자 정의 callback 함수 (Firebase 데이터가 다 조회되었는지 check하는 역할)
     public interface MyDataCallback {
         void onCallback(boolean exists, ResumeInfo info);
     }
@@ -709,10 +716,11 @@ public class ProjectInfoActivity extends AppCompatActivity {
 
     }
 
+    // Firebase 연동
+    // resume 컬렉션을 조회하여 이력서 데이터를 가져옴.
+    // 내부 callback 함수를 호출하여 데이터 조회가 완료됨을 알림.
     public void selectQueryOnFirebase(final MyDataCallback callback){
-        // Firebase 연동
-        // 프로젝트 리스트를 긁어서 보여준다.
-        // Collection(=DB) -> Document(=row)으로 구성되어있으며, column은 getData로 Map형태로 가져올 수 있다.
+        // 현재 로그인된 ID 가져옴
         String id = SaveSharedPreference.getUserName(ProjectInfoActivity.this);
 
         db.collection("resume").document(id)
@@ -741,6 +749,7 @@ public class ProjectInfoActivity extends AppCompatActivity {
                         callback.onCallback(false, null);
                     }
                 });
+
     }
 }
 ```
@@ -915,7 +924,7 @@ public class ResumeActivity extends AppCompatActivity {
                 editInYear1, editInYear2, editInYear3, editOutYear1, editOutYear2, editOutYear3,
                 editInMonth1, editInMonth2, editInMonth3, editOutMonth1, editOutMonth2, editOutMonth3;
 
-
+    // 사용자 정의 callback 함수 (Firebase 데이터가 다 조회되었는지 check하는 역할)
     public interface MyDataCallback {
         void onCallback(boolean exists, ResumeInfo info);
     }
@@ -1073,11 +1082,11 @@ public class ResumeActivity extends AppCompatActivity {
         });
     }
 
-
+    // Firebase 연동
+    // resume 컬렉션을 조회하여 이력서 데이터를 가져옴.
+    // 내부 callback 함수를 호출하여 데이터 조회가 완료됨을 알림.
     public void selectQueryOnFirebase(final MyDataCallback callback){
-        // Firebase 연동
-        // 프로젝트 리스트를 긁어서 보여준다.
-        // Collection(=DB) -> Document(=row)으로 구성되어있으며, column은 getData로 Map형태로 가져올 수 있다.
+        // 현재 로그인된 ID 가져옴
         String id = SaveSharedPreference.getUserName(ResumeActivity.this);
 
         db.collection("resume").document(id)
