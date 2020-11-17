@@ -7,7 +7,7 @@
 2. 팀 정보
 3. 버전 및 실행환경
 4. 주요 기능
-5. 특이사항
+5. 자신의 역할 
 
 <br>
 
@@ -99,7 +99,7 @@
  
 <img src="https://github.com/young43/makeITProject/blob/main/img/project_resume.jpg?raw=true" alt="두번째 화면" width=500/>
 
-## 5. 각자 맡은 부분 
+## 5. 자신의 역할 
 
 
 ### MainActivity
